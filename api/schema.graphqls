@@ -1,0 +1,36 @@
+type Card {
+    id: ID!
+    valid_until: String!
+    tags: [String!]
+    name: String
+    user: User
+    external: External
+}
+
+type External {
+    card_id: String!
+}
+
+input CreateCardInput {
+    valid_until: String!
+    tags: [String!]
+    name: String
+}
+
+type User {
+    email: String!
+    id: String
+}
+
+type Mutation {
+    createCard(input: CreateCardInput!): Card!
+}
+
+type Query {
+    findCard(id: ID!): Card
+}
+
+schema {
+    query: Query
+    mutation: Mutation
+}
