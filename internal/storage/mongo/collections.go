@@ -5,5 +5,5 @@ import (
 )
 
 func ProvideCollection(db *mongo.Database) (*mongo.Collection, error) {
-	return db.Collection("subscriptions"), nil
+	return db.Collection("cards"), nil
 }

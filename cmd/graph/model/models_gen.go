@@ -2,26 +2,45 @@
 
 package model
 
+type Address struct {
+	ZipCode string `json:"zipCode"`
+	Number  string `json:"number"`
+}
+
 type Card struct {
 	ID         string    `json:"id"`
 	ValidUntil string    `json:"valid_until"`
 	Tags       []string  `json:"tags"`
-	Name       *string   `json:"name"`
+	Name       string    `json:"name"`
 	User       *User     `json:"user"`
 	External   *External `json:"external"`
 }
 
 type CreateCardInput struct {
-	ValidUntil string   `json:"valid_until"`
-	Tags       []string `json:"tags"`
-	Name       *string  `json:"name"`
+	Tags         []string      `json:"tags"`
+	Name         string        `json:"name"`
+	PersonalData *PersonalData `json:"personalData"`
 }
 
 type External struct {
 	CardID string `json:"card_id"`
 }
 
+type PersonalData struct {
+	Name       string   `json:"name"`
+	LastName   string   `json:"lastName"`
+	MotherName string   `json:"motherName"`
+	Document   string   `json:"document"`
+	BirthDate  string   `json:"birthDate"`
+	Address    *Address `json:"address"`
+	Phone      *Phone   `json:"phone"`
+}
+
+type Phone struct {
+	Code   string `json:"code"`
+	Number string `json:"number"`
+}
+
 type User struct {
-	Email string  `json:"email"`
-	ID    *string `json:"id"`
+	ID string `json:"id"`
 }

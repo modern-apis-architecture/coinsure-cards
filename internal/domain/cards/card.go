@@ -1,6 +1,9 @@
 package cards
 
-import "time"
+import (
+	cards "github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/response"
+	"time"
+)
 
 type Card struct {
 	Id             string    `json:"id" bson:"_id"`
@@ -11,9 +14,15 @@ type Card struct {
 	Name           string    `json:"name" bson:"name"`
 	Tags           []string  `json:"tags" bson:"tags"`
 	User           User      `json:"user" bson:"user"`
+	External       External  `json:"external" bson:"external"`
+	Status         string    `json:"status" bson:"status"`
 }
 
 type User struct {
-	Id    string `json:"id" bson:"user_id"`
-	Email string `json:"email" bson:"email"`
+	Id string `json:"id" bson:"user_id"`
+}
+
+type External struct {
+	Id              string `json:"id" bson:"external_id"`
+	cards.AccountId `json:"account" bson:"account"`
 }

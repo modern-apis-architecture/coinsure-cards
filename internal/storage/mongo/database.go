@@ -16,6 +16,6 @@ func NewDatabase() (*mongo.Database, error) {
 	if m, err := mongo.Connect(ctx, options.Client().ApplyURI(dsn)); err != nil {
 		return nil, err
 	} else {
-		return m.Database("banklo-cards-issuer"), nil
+		return m.Database("coinsure-cards"), nil
 	}
 }

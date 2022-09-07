@@ -2,9 +2,9 @@ type Card {
     id: ID!
     valid_until: String!
     tags: [String!]
-    name: String
-    user: User
-    external: External
+    name: String!
+    user: User!
+    external: External!
 }
 
 type External {
@@ -12,14 +12,33 @@ type External {
 }
 
 input CreateCardInput {
-    valid_until: String!
     tags: [String!]
-    name: String
+    name: String!
+    personalData: PersonalData!
+}
+
+input PersonalData {
+    name: String!
+    lastName: String!
+    motherName: String!
+    document: String!
+    birthDate: String!
+    address: Address!
+    phone: Phone!
+}
+
+input Address{
+    zipCode: String!
+    number: String!
+}
+
+input Phone{
+    code: String!
+    number: String!
 }
 
 type User {
-    email: String!
-    id: String
+    id: String!
 }
 
 type Mutation {
