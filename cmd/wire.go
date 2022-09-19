@@ -6,8 +6,12 @@ package main
 import (
 	"github.com/google/wire"
 	"github.com/modern-apis-architecture/coinsure-cards/cmd/graph"
+	"github.com/modern-apis-architecture/coinsure-cards/internal/adapter"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/repository"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service"
+	service2 "github.com/modern-apis-architecture/coinsure-cards/internal/domain/notification/service"
+	"github.com/modern-apis-architecture/coinsure-cards/internal/message/cloudevents"
+	"github.com/modern-apis-architecture/coinsure-cards/internal/message/kafka"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/security/middleware"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/security/openid"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/storage/banklo"
@@ -29,6 +33,8 @@ func buildAppContainer() (*Application, error) {
 		wire.Bind(new(service.AccountExternalService), new(*account.BankloAccountService)),
 		wire.Bind(new(service.CardExternalService), new(*cards2.BankloCardService)),
 		wire.Bind(new(service.SubscriptionExternalService), new(*subscription.BankloSubscriptionService)),
+		kafka.ProduceKafkaSender, cloudevents.NewCloudEventsReceiver,
+		service2.NewCardUpdateService, adapter.NewWebhookHandler,
 	)
 	return nil, nil
 }

@@ -7,4 +7,5 @@ import (
 
 type AccountExternalService interface {
 	CreateAccount(request *request.CreateAccountRequest) (*cards2.AccountId, error)
+	Get(id string) (*cards2.AccountId, error)
 }

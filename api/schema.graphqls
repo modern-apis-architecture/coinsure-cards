@@ -9,6 +9,7 @@ type Card {
 
 type External {
     card_id: String!
+    account_id: String!
 }
 
 input CreateCardInput {

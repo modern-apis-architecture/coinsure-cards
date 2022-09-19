@@ -28,7 +28,8 @@ func (r *mutationResolver) CreateCard(ctx context.Context, input model.CreateCar
 		Name:           input.Name,
 		Tags:           input.Tags,
 		User: cards.User{
-			Id: user.Id,
+			Id:   user.Id,
+			Name: input.PersonalData.Name + " " + input.PersonalData.LastName,
 		},
 		External: cards.External{},
 		Status:   "pending",
@@ -66,6 +67,7 @@ func (r *mutationResolver) CreateCard(ctx context.Context, input model.CreateCar
 
 // FindCard is the resolver for the findCard field.
 func (r *queryResolver) FindCard(ctx context.Context, id string) (*model.Card, error) {
+
 	card, err := r.cardSvc.Find(id)
 	if err != nil {
 		return nil, err
@@ -78,7 +80,7 @@ func (r *queryResolver) FindCard(ctx context.Context, id string) (*model.Card, e
 		User: &model.User{
 			ID: card.User.Id,
 		},
-		External: &model.External{CardID: card.External.Id},
+		External: &model.External{CardID: card.External.Card.Id},
 	}
 	return c, nil
 }

@@ -48,6 +48,7 @@ func (am *AuthMiddleware) AuthMiddleware() func(http.Handler) http.Handler {
 			err2 := jwtt.Claims(key, claimDest)
 			if err2 != nil {
 				http.Error(w, "invalid claims", http.StatusUnauthorized)
+				return
 			}
 			user := &UserData{
 				Id: claimDest.ID,

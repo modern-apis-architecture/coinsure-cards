@@ -23,7 +23,8 @@ type CreateCardInput struct {
 }
 
 type External struct {
-	CardID string `json:"card_id"`
+	CardID    string `json:"card_id"`
+	AccountID string `json:"account_id"`
 }
 
 type PersonalData struct {

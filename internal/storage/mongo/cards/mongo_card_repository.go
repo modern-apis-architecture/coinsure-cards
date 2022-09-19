@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"time"
 )
 
 type MongoCardRepository struct {
@@ -35,6 +36,24 @@ func (mcr *MongoCardRepository) GetCard(id string) (*cards.Card, error) {
 	} else {
 		return &doc, nil
 	}
+}
+
+func (mcr *MongoCardRepository) UpdateCard(cardId string, status string, accountId string) error {
+	ctx := context.Background()
+	_, err := mcr.collection.UpdateOne(
+		ctx,
+		bson.M{"_id": cardId},
+		bson.D{
+			{"$set", bson.D{{"status", status}}},
+			{"$set", bson.D{{"ready_at", time.Now()}}},
+			{"$set", bson.D{{"external.card.id", cardId}}},
+			{"$set", bson.D{{"external.account.id", accountId}}},
+		},
+	)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func NewMongoCardRepository(coll *mongo.Collection) *MongoCardRepository {

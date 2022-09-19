@@ -19,10 +19,16 @@ type Card struct {
 }
 
 type User struct {
-	Id string `json:"id" bson:"user_id"`
+	Id          string `json:"id" bson:"user_id"`
+	Name        string `json:"name" bson:"name"`
+	PhoneNumber string `json:"phone_number"`
 }
 
 type External struct {
-	Id              string `json:"id" bson:"external_id"`
-	cards.AccountId `json:"account" bson:"account"`
+	Card    CardExternal    `json:"card" bson:"card"`
+	Account cards.AccountId `json:"account" bson:"account"`
+}
+
+type CardExternal struct {
+	Id string `json:"id" bson:"id"`
 }

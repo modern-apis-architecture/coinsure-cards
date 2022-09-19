@@ -1,10 +1,13 @@
 package service
 
 import (
+	"fmt"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/repository"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/request"
 )
+
+const PhoneNumber = "+55%s%s"
 
 type CardService struct {
 	repo   repository.CardRepository
@@ -43,5 +46,6 @@ func (cs *CardService) Store(personalData *request.PersonalData, card *cards.Car
 	if err != nil {
 		return nil, err
 	}
+	card.User.PhoneNumber = fmt.Sprintf(PhoneNumber, personalData.Phone.Code, personalData.Phone.Number)
 	return cs.repo.AddCard(card)
 }

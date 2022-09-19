@@ -8,7 +8,11 @@ package main
 
 import (
 	"github.com/modern-apis-architecture/coinsure-cards/cmd/graph"
+	"github.com/modern-apis-architecture/coinsure-cards/internal/adapter"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service"
+	service2 "github.com/modern-apis-architecture/coinsure-cards/internal/domain/notification/service"
+	"github.com/modern-apis-architecture/coinsure-cards/internal/message/cloudevents"
+	"github.com/modern-apis-architecture/coinsure-cards/internal/message/kafka"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/security/middleware"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/security/openid"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/storage/banklo"
@@ -40,7 +44,11 @@ func buildAppContainer() (*Application, error) {
 	bankloCardService := cards2.NewBankloCardService(client)
 	bankloSubscriptionService := subscription.NewBankloSubscriptionService(client)
 	cardService := service.NewCardService(mongoCardRepository, bankloAccountService, bankloCardService, bankloSubscriptionService)
-	resolver := graph.NewResolver(cardService)
-	application := NewApplication(authMiddleware, jwtValidator, resolver)
+	resolver := graph.NewResolver(cardService, bankloAccountService)
+	sender := kafka.ProduceKafkaSender()
+	clientClient := cloudevents.NewCloudEventsReceiver(sender)
+	cardUpdateService := service2.NewCardUpdateService(mongoCardRepository, clientClient)
+	webhookHandler := adapter.NewWebhookHandler(cardUpdateService)
+	application := NewApplication(authMiddleware, jwtValidator, resolver, webhookHandler)
 	return application, nil
 }
