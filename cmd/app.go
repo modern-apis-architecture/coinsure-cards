@@ -59,6 +59,7 @@ func (app *Application) grqphqlServer() {
 func (app *Application) restServer() {
 	e := echo.New()
 	e.POST("/cards-webhook", app.wh.Handle)
+	e.GET("/health", health)
 	e.Logger.Fatal(e.Start(":6000"))
 }
 
@@ -69,4 +70,7 @@ func NewApplication(authMid *middleware.AuthMiddleware, jv *middleware.JwtValida
 		resolver: resolver,
 		wh:       wh,
 	}
+}
+func health(c echo.Context) error {
+	return c.String(http.StatusOK, "UP")
 }

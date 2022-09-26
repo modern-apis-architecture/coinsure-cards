@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "coinsure-cards.fullname" . }}
+data:
+  MONGO_DSN: "mongodb://mongodb.database:27017"
+  CARDS_ISSUER_ROOT_URL: "http://banklo-cards-issuer.cards.svc.cluster.local"
+  OPENID_ISSUER: "http://keycloak.iam.svc.cluster.local/realms/coinsure"
