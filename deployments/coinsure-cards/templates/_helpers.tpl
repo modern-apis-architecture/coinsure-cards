@@ -48,6 +48,8 @@ Selector labels
 {{- define "coinsure-cards.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "coinsure-cards.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: coinsure-cards
+version: v1
 {{- end }}
 
 {{/*
