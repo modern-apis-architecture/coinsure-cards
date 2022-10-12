@@ -1,0 +1,10 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: {{ include "coinsure-cards.fullname" . }}
+spec:
+  host: {{ include "coinsure-cards.fullname" . }}
+  subsets:
+    - name: v1
+      labels:
+        version: v1
