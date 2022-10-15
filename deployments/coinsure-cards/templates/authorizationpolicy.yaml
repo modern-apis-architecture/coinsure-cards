@@ -1,0 +1,12 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "coinsure-cards.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+      app: coinsure-cards
+  rules:
+    - from:
+        - source:
+            requestPrincipals: ["*"]
