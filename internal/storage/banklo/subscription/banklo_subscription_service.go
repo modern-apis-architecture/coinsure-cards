@@ -2,6 +2,7 @@ package subscription
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/request"
 	"io"
@@ -13,7 +14,7 @@ type BankloSubscriptionService struct {
 	cli *http.Client
 }
 
-func (bsur *BankloSubscriptionService) Subscribe(cardId string) error {
+func (bsur *BankloSubscriptionService) Subscribe(ctx context.Context, cardId string) error {
 	sr := &request.CreateSubscriptionRequest{
 		Token: "AAA",
 		Url:   "http://localhost:9999/cards/" + cardId,
@@ -22,6 +23,7 @@ func (bsur *BankloSubscriptionService) Subscribe(cardId string) error {
 	rootUrl := os.Getenv("CARDS_ISSUER_ROOT_URL")
 	req, err := http.NewRequest(http.MethodPost, rootUrl+"/cards/"+cardId+"/subscribe", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", ctx.Value("external-auth").(string))
 	if err != nil {
 		return err
 	}

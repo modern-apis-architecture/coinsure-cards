@@ -2,6 +2,7 @@ package cards
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/request"
 	cards "github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/response"
@@ -15,11 +16,12 @@ type BankloCardService struct {
 	cli *http.Client
 }
 
-func (bcs *BankloCardService) Create(accountId string, request *request.CreateCardRequest) (*cards.CardCreated, error) {
+func (bcs *BankloCardService) Create(ctx context.Context, accountId string, request *request.CreateCardRequest) (*cards.CardCreated, error) {
 	rootUrl := os.Getenv("CARDS_ISSUER_ROOT_URL")
 	body, _ := json.Marshal(request)
 	req, err := http.NewRequest(http.MethodPost, rootUrl+"/accounts/"+accountId+"/cards", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", ctx.Value("external-auth").(string))
 	if err != nil {
 		return nil, err
 	}

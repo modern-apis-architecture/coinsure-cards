@@ -2,6 +2,7 @@ package account
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/request"
 	cards2 "github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/response"
@@ -15,11 +16,12 @@ type BankloAccountService struct {
 	cli *http.Client
 }
 
-func (bas *BankloAccountService) CreateAccount(request *request.CreateAccountRequest) (*cards2.AccountId, error) {
+func (bas *BankloAccountService) CreateAccount(ctx context.Context, request *request.CreateAccountRequest) (*cards2.AccountId, error) {
 	rootUrl := os.Getenv("CARDS_ISSUER_ROOT_URL")
 	body, _ := json.Marshal(request)
 	req, err := http.NewRequest(http.MethodPost, rootUrl+"/accounts", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", ctx.Value("external-auth").(string))
 	if err != nil {
 		return nil, err
 	}
@@ -44,11 +46,11 @@ func (bas *BankloAccountService) CreateAccount(request *request.CreateAccountReq
 	return acc, nil
 }
 
-func (bas *BankloAccountService) Get(id string) (*cards2.AccountId, error) {
+func (bas *BankloAccountService) Get(ctx context.Context, id string) (*cards2.AccountId, error) {
 	rootUrl := os.Getenv("CARDS_ISSUER_ROOT_URL")
-
 	req, err := http.NewRequest(http.MethodGet, rootUrl+"/accounts/"+id, nil)
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", ctx.Value("external-auth").(string))
 	if err != nil {
 		return nil, err
 	}

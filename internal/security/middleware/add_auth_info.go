@@ -54,7 +54,8 @@ func (am *AuthMiddleware) AuthMiddleware() func(http.Handler) http.Handler {
 				Id: claimDest.ID,
 			}
 			ctx := context.WithValue(r.Context(), userCtxKey, user)
-			r = r.WithContext(ctx)
+			nc := context.WithValue(ctx, "external-auth", token)
+			r = r.WithContext(nc)
 			next.ServeHTTP(w, r)
 		})
 	}

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/repository"
@@ -29,20 +30,20 @@ func (cs *CardService) Find(id string) (*cards.Card, error) {
 	return cs.repo.GetCard(id)
 }
 
-func (cs *CardService) Store(personalData *request.PersonalData, card *cards.Card) (*cards.CardId, error) {
+func (cs *CardService) Store(ctx context.Context, personalData *request.PersonalData, card *cards.Card) (*cards.CardId, error) {
 	accReq := &request.CreateAccountRequest{
 		PersonalData: *personalData,
 	}
-	account, err := cs.acSvc.CreateAccount(accReq)
+	account, err := cs.acSvc.CreateAccount(ctx, accReq)
 	if err != nil {
 		return nil, err
 	}
 	ccReq := &request.CreateCardRequest{Name: card.Name}
-	cardCreated, err := cs.ccSvc.Create(account.Id, ccReq)
+	cardCreated, err := cs.ccSvc.Create(ctx, account.Id, ccReq)
 	if err != nil {
 		return nil, err
 	}
-	err = cs.subSvc.Subscribe(cardCreated.Id)
+	err = cs.subSvc.Subscribe(ctx, cardCreated.Id)
 	if err != nil {
 		return nil, err
 	}
