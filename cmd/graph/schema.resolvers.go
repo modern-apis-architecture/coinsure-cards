@@ -49,7 +49,7 @@ func (r *mutationResolver) CreateCard(ctx context.Context, input model.CreateCar
 			Number: input.PersonalData.Phone.Number,
 		},
 	}
-	_, err := r.cardSvc.Store(pd, card)
+	_, err := r.cardSvc.Store(ctx, pd, card)
 	if err != nil {
 		return nil, err
 	}
