@@ -12,6 +12,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
 	github.com/labstack/echo/v4 v4.9.0
+	github.com/sirupsen/logrus v1.8.1
 	github.com/vektah/gqlparser/v2 v2.5.0
 	go.mongodb.org/mongo-driver v1.10.1
 	gopkg.in/square/go-jose.v2 v2.6.0

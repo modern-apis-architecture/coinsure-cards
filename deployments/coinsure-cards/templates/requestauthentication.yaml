@@ -9,3 +9,6 @@ spec:
   jwtRules:
     - issuer: "coinsure"
       jwksUri: http://keycloak.iam.svc.cluster.local/realms/coinsure/protocol/openid-connect/certs
+      forwardOriginalToken: true
+      audiences:
+        - account

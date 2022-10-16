@@ -13,6 +13,7 @@ import (
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/request"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/security/middleware"
+	log "github.com/sirupsen/logrus"
 )
 
 // CreateCard is the resolver for the createCard field.
@@ -51,6 +52,7 @@ func (r *mutationResolver) CreateCard(ctx context.Context, input model.CreateCar
 	}
 	_, err := r.cardSvc.Store(ctx, pd, card)
 	if err != nil {
+		log.Errorf("error to create card %v", err)
 		return nil, err
 	}
 	cr := &model.Card{

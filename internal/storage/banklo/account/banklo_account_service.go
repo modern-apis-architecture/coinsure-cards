@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/request"
 	cards2 "github.com/modern-apis-architecture/coinsure-cards/internal/domain/cards/service/response"
+	log "github.com/sirupsen/logrus"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -21,7 +22,8 @@ func (bas *BankloAccountService) CreateAccount(ctx context.Context, request *req
 	body, _ := json.Marshal(request)
 	req, err := http.NewRequest(http.MethodPost, rootUrl+"/accounts", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", ctx.Value("external-auth").(string))
+	log.Info(ctx.Value("external-auth").(string))
+	req.Header.Set("Authorization", "Bearer "+ctx.Value("external-auth").(string))
 	if err != nil {
 		return nil, err
 	}
@@ -32,6 +34,7 @@ func (bas *BankloAccountService) CreateAccount(ctx context.Context, request *req
 		}
 	}(resp.Body)
 	if err != nil {
+		log.Errorf("error to create card HTTP %v", err)
 		return nil, err
 	}
 	rb, err := ioutil.ReadAll(resp.Body)
@@ -43,6 +46,7 @@ func (bas *BankloAccountService) CreateAccount(ctx context.Context, request *req
 	if jsonErr != nil {
 		return nil, err
 	}
+	log.Info("Account created!!!")
 	return acc, nil
 }
 
@@ -50,7 +54,8 @@ func (bas *BankloAccountService) Get(ctx context.Context, id string) (*cards2.Ac
 	rootUrl := os.Getenv("CARDS_ISSUER_ROOT_URL")
 	req, err := http.NewRequest(http.MethodGet, rootUrl+"/accounts/"+id, nil)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", ctx.Value("external-auth").(string))
+	log.Info(ctx.Value("external-auth").(string))
+	req.Header.Set("Authorization", "Bearer "+ctx.Value("external-auth").(string))
 	if err != nil {
 		return nil, err
 	}
