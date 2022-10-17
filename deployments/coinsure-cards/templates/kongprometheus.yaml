@@ -1,0 +1,7 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: prometheus-coinsure-cards
+plugin: prometheus
+{{end}}

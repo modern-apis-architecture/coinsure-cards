@@ -1,0 +1,10 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: configuration.konghq.com/v1
+kind: KongIngress
+metadata:
+  name: coinsure-cards-do-not-preserve-host
+route:
+  preserve_host: false
+upstream:
+  host_header: {{ include "coinsure-cards.fullname" . }}.cards.svc
+{{end}}

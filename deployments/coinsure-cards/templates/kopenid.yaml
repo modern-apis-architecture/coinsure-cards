@@ -1,0 +1,16 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: oidc-coinsure-cards
+config:
+  client_id: "coinsure-cards"
+  client_secret: "IRS8Zvc2RncEcwmrb7aSDKWaOqZmaODZ"
+  discovery: "http://keycloak.iam/realms/coinsure/.well-known/openid-configuration"
+  introspection_endpoint: "http://keycloak.iam/realms/coinsure/protocol/openid-connect/token/introspect"
+  bearer_only: "yes"
+  bearer_jwt_auth_enable: "yes"
+  bearer_jwt_auth_allowed_auds:
+    - account
+plugin: oidc
+{{end}}
