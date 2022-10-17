@@ -4,6 +4,18 @@ metadata:
   name: {{ include "coinsure-cards.fullname" . }}
 spec:
   host: {{ include "coinsure-cards.fullname" . }}
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 4000ms
+      http:
+        http1MaxPendingRequests: 10
+        maxRequestsPerConnection: 100
+    outlierDetection:
+      consecutive5xxErrors: 10
+      interval: 5m
+      baseEjectionTime: 15m
   subsets:
     - name: v1
       labels:
